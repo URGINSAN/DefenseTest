@@ -17,7 +17,7 @@ public class Barrel : MonoBehaviour
     {
         if (type == Type.Crate)
         {
-            GameObject go = Instantiate(Breakable, transform.position, Quaternion.identity);
+            GameObject go = Instantiate(Breakable, transform.position, transform.rotation);
             go.transform.localScale = transform.localScale;
             go.GetComponent<ExplodeBarrel>().Explode();
 
@@ -25,7 +25,7 @@ public class Barrel : MonoBehaviour
         }
         if (type == Type.Barrel)
         {
-            GameObject go = Instantiate(Breakable, transform.position, Quaternion.identity);
+            GameObject go = Instantiate(Breakable, transform.position, transform.rotation);
             go.transform.localScale = transform.localScale;
          
 
