@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
+    public float Damage = 15;
+    [Space]
     public float fireRate = 0.25f;
     public float weaponRange = 50f;
     public float RandomizeVectorMin = 1;
@@ -36,15 +38,14 @@ public class PlayerShoot : MonoBehaviour
 
             if (Physics.Raycast(rayOrigin, forw, out hit, weaponRange))
             {
-                /*if (health != null)
+                if (hit.transform.gameObject.GetComponent<HealthModule>() != null)
                 {
-                    // Call the damage function of that script, passing in our gunDamage variable
-                    health.Damage(gunDamage);
-                }*/
+                    hit.transform.gameObject.GetComponent<HealthModule>().Damage(-Damage);
+                }
 
-                if (hit.rigidbody != null)
+                if (hit.transform.gameObject.GetComponent<Rigidbody>() != null)
                 {
-                    hit.rigidbody.AddForce(-hit.normal * 100);
+                    hit.transform.gameObject.GetComponent<Rigidbody>().AddForce(-hit.normal * 100, ForceMode.Impulse);
                 }
 
                 GameObject go = Instantiate(ImpactPart, hit.point, Quaternion.identity);
