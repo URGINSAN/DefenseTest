@@ -12,15 +12,21 @@ public class PlayerMove : MonoBehaviour
     public float zInput;
     Vector3 direction;
     [Space]
+    public Transform CamParent;
     public Camera Cam;
     private Vector3 MousePos;
     [Space]
+    public bool CanStep = true;
+    public float StepDelay = 0.5f;
+    [Space]
     public PlayerAnimation PlayerAnim;
+    public PlayerShoot PlayerShoot;
+    public PlayerAudio PlayerAudio;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Cam.transform.SetParent(null);
+        CamParent.transform.SetParent(null);
     }
 
     void Update()
@@ -49,7 +55,28 @@ public class PlayerMove : MonoBehaviour
         rb.MovePosition(transform.position + speed * Time.deltaTime * direction);
 
         if (xInput == 0 && zInput == 0)
+        {
             PlayerAnim.PlayAnim("Rifle Idle");
+            PlayerShoot.GunEndCorrect(false);
+        }
+        else
+        {
+            PlayerShoot.GunEndCorrect(true);
+
+            if (CanStep)
+            {
+                PlayerAudio.PlaySnd("Move");
+
+                IEnumerator IE()
+                {
+                    CanStep = false;
+                    yield return new WaitForSeconds(StepDelay);
+                    CanStep = true;
+                }
+
+                StartCoroutine(IE());
+            }
+        }
         if (xInput == 0 && zInput > 0)
             PlayerAnim.PlayAnim("Run Forward");
         if (xInput < 0 && zInput == 0)
